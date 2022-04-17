@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -18,11 +19,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.navisamplerun.UIlayer.uiUtility.Screen
 
 @Composable
-fun Navigation(){
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route){
-        composable(route=Screen.MainScreen.route){
-MainScreen(navController = navController)
+fun NavigationGraph(navController: NavHostController){
+    NavHost(navController = navController, startDestination = Screen.HomeScreen.route){
+        composable(route=Screen.HomeScreen.route){
+HomeScreen()
         }
         composable(route = Screen.DetailScreen.route){
             DetailScreen()
@@ -31,11 +31,19 @@ MainScreen(navController = navController)
 }
 
 @Composable
-fun MainScreen(navController: NavController){
-    Scaffold(bottomBar ={Bottombar(navController = navController)} ) {
-        Text("On the main Screen")
+fun MainScreen(){
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = { Bottombar(navController = navController) }
+    ) {
+        NavigationGraph(navController = navController)
     }
 
+}
+
+@Composable
+fun HomeScreen(){
+    Text("On the Home Screen")
 }
 @Composable
 fun DetailScreen(){
@@ -44,7 +52,7 @@ fun DetailScreen(){
 
 @Composable
 fun Bottombar(navController: NavController){
-    val screens= listOf(Screen.MainScreen,
+    val screens= listOf(Screen.HomeScreen,
         Screen.DetailScreen
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
